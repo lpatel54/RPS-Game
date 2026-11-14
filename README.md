@@ -1,67 +1,108 @@
-# my-first-app-fall-2026
+# RPS Game and Stocks Dashboard
+
+A local Python command-line game and stocks dashboard for the Fall 2026 Quality Control assignment.
+Play one round against the computer: rock beats scissors, scissors beats paper,
+and paper beats rock. Matching choices tie. The bonus dashboard fetches daily
+adjusted stock prices from AlphaVantage and saves an interactive HTML chart with
+the latest adjusted close and the change over the displayed period.
 
 ## Prerequisites
 
-Install python version 3.x (for example using Anaconda).
+- Python 3.11 or newer (CI checks Python 3.11, 3.12, and 3.13).
+- Git to clone the repository and save changes.
+- A terminal such as Terminal, PowerShell, or the VS Code terminal.
 
-## Setup
+## Download
 
-some instructions here
-
-1. Clone [the repo](https://github.com/s2t2/my-first-app-fall-2026) from GitHub, and put it somewhere (like your Desktop).
-2. Navigate to the local repo from the command line (for example if on your desktop):
+Clone [your repository](https://github.com/lpatel54/RPS-Game):
 
 ```sh
-cd ~/Desktop/my-first-app-fall-2026
+git clone https://github.com/lpatel54/RPS-Game.git
+cd RPS-Game
 ```
 
-3. Create a new Anaconda virtual environment called "rps-env" (first time only):
+If you downloaded a ZIP instead, extract it and open a terminal in the extracted
+folder. All following commands run from the folder containing this README.
+
+## Create and activate a virtual environment
+
+Create the environment once:
+
+```sh
+python -m venv .venv
+```
+
+On macOS or Linux, use `python3` instead of `python` if needed. On Windows,
+`py -3` can also be used to create the environment.
+
+Activate it every time you open a new terminal:
+
+macOS / Linux:
+
+```sh
+source .venv/bin/activate
+```
+
+Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Windows Command Prompt:
+
+```bat
+.venv\Scripts\activate.bat
+```
+
+If PowerShell blocks activation, use Command Prompt, or run the environment's
+Python directly: `.venv\Scripts\python.exe -m pip install -r requirements.txt`
+and `.venv\Scripts\python.exe -m app.rps`.
+
+### Anaconda alternative
+
+Use this instead of the `.venv` steps if following the class's Anaconda setup:
 
 ```sh
 conda create -n rps-env python=3.11
-```
-
-4. Activate the virtual environment as necessary (every time you come back to the project):
-
-```sh
 conda activate rps-env
 ```
 
-5. Install package dependencies:
+## Install packages
+
+After activating either environment:
 
 ```sh
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-## Usage
+`requirements.txt` lists pinned versions of pandas (data preparation), Plotly
+(interactive charts), requests (API access), python-dotenv (local configuration),
+and pytest (tests). The game itself uses Python's standard library. Virtual
+environments and caches are excluded from Git.
 
-some commands here to run our file(s)
-
-Run the example script:
-
-```sh
-python app/my_script.py
-
-# alternatively:
-python -m app.my_script
-```
-
-
-Run the example script:
+## Run the game
 
 ```sh
-python app/rps.py
-
-# alternatively:
 python -m app.rps
 ```
 
-## Testing
-
-To run tests:
+Alternatively:
 
 ```sh
-pytest
+python app/rps.py
+```
+
+Enter `rock`, `paper`, or `scissors`. Capitalization and surrounding spaces are
+accepted. For example, choosing `paper` against the computer's `rock` prints
+`USER WINS`. The computer chooses randomly each round. Run the command again to
+play another round. Invalid choices print a helpful message and exit with status
+1; Ctrl+C or end-of-input cancels gracefully.
+
+The additional in-class practice script can be run with:
+
+```sh
+python -m app.my_script
 ```
 
 ## Run the stocks dashboard
@@ -155,19 +196,25 @@ and AlphaVantage availability. To check live access, run the live command above
 locally and confirm a dated chart is produced. Live access is not asserted by the
 offline tests.
 
+Pytest discovers both `tests/` (the detailed game and dashboard tests) and
+`test/` (the additional in-class examples), so both sets run in CI.
+
 ## Code structure
 
 ```text
 app/
   __init__.py          Python package marker
+  my_script.py         Additional in-class practice script
   rps.py               Reusable game functions and CLI entry point
   stocks.py            Fetching, validation, dashboard, and CLI
 tests/
   test_rps.py          Unit and command-line integration tests
   test_stocks.py       Stocks unit and local HTML integration tests
+test/
+  rps_test.py          Additional in-class game tests
 .github/workflows/
   tests.yml            GitHub Actions test workflow
-requirements.txt       Pinned test dependency
+requirements.txt       Pinned application and test dependencies
 pytest.ini             Test discovery and import configuration
 .env.example           Blank local API configuration template
 ```
@@ -220,100 +267,3 @@ separate parsing and chart functions and offline tests.
 
 When finished, run `deactivate` to leave a `.venv` environment, or
 `conda deactivate` to leave an Anaconda environment.
-=======
-# My First Repo!
-
-Learning and practicing version control!
-
-## Setup
-
-Clone the repo to download it from GitHub. Perhaps onto the Desktop.
-
-Navigate to the repo using the command line.
-
-```sh
-cd ~/Desktop/my-first-repo-fall-2025
-```
-
-Create a virtual environment:
-
-```sh
-conda create -n my-first-env-fall-2025 python=3.11
-```
-
-Activate the virtual environment:
-
-```sh
-conda activate my-first-env-fall-2025
-```
-
-Install package dependencies:
-
-```sh
-pip install -r requirements.txt
-```
-
-## Configuration
-
-The stocks functionality requires an AlphaVantage API key. Obtain a premium AlphaVantage API Key (using the [form](https://www.alphavantage.co/support/#api-key) or shared by the prof).
-
-Create a local ".env" file and store your environment variable in there:
-
-```sh
-# this is the ".env" file...
-
-ALPHAVANTAGE_API_KEY="______________"
-
-# also tell flask where our web app is defined:
-FLASK_APP=web_app
-```
-
-## Usage
-
-Example script:
-
-```sh
-python app/my_script.py
-```
-
-Game of rock, paper, scissors:
-
-```sh
-python app/rps.py
-
-# alternative "modular style" command:
-python -m app.rps
-```
-
-Stocks dashboard:
-
-```sh
-python -m app.stocks
-```
-
-### Web App
-
-Run the web app (then view in the browser at http://localhost:5000/):
-
-```sh
-# if we have the FLASK_APP=web_app env var in the ".env" file:
-flask run
-
-# Mac OS:
-FLASK_APP=web_app flask run
-
-# Windows OS:
-# ... if `export` doesn't work for you, try `set` instead
-# ... or set FLASK_APP variable via ".env" file
-export FLASK_APP=web_app
-flask run
-```
-
-## Testing
-
-Run tests:
-
-```sh
-pytest
-```
->>>>>>> Stashed changes
