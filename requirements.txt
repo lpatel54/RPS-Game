@@ -1,0 +1,8 @@
+# Stocks dashboard:
+pandas==2.2.3
+python-dotenv==1.0.1
+plotly==6.0.1
+requests==2.32.4
+
+# Tests:
+pytest==8.3.5

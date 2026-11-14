@@ -218,3 +218,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local credentials and generated dashboards
+.env.*
+!.env.example
+work/
+.DS_Store
