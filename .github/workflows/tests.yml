@@ -26,3 +26,24 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Run tests
         run: python -m pytest -q
+
+  live-stocks:
+    name: Live stocks API and dashboard
+    needs: test
+    # Fork PRs cannot access repository secrets. Keep those runs offline.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Verify live stock data and dashboard
+        env:
+          ALPHAVANTAGE_API_KEY: ${{ secrets.AlphaVantage_Secret }}
+          RUN_LIVE_STOCKS: "1"
+        run: python -m pytest -q integration/test_stocks_live.py -m live --tb=short

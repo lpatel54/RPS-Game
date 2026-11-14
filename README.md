@@ -189,15 +189,40 @@ parameters, environment loading, CSV validation, price ordering, rate limits,
 network and HTTP errors, credential redaction, chart values, HTML output, and CLI
 behavior. The demo path writes a real standalone HTML chart during tests.
 
-Tests do not need network access, credentials, or an API key. CI uses these same
-tests, so it needs no repository secret. Mocked responses make automated tests
-repeatable; a successful live fetch still depends on a valid key, endpoint access,
-and AlphaVantage availability. To check live access, run the live command above
-locally and confirm a dated chart is produced. Live access is not asserted by the
-offline tests.
+The default test run uses mocked HTTP responses and needs no network or API key.
+It skips the opt-in live integration test. GitHub Actions runs the offline tests
+on three Python versions, then runs one separate live check using the repository
+secret named `AlphaVantage_Secret`. The workflow maps that secret to the app's
+`ALPHAVANTAGE_API_KEY` environment variable only for the live test step. The key
+is never written into source files or uploaded with the generated chart.
 
-Pytest discovers both `tests/` (the detailed game and dashboard tests) and
-`test/` (the additional in-class examples), so both sets run in CI.
+The live check calls the actual `fetch_stocks_csv()` function, requires at least
+100 daily adjusted prices, and generates the actual dashboard. It fails if the
+secret is missing, invalid, rate-limited, or lacks endpoint access. Fork PRs skip
+the secret-dependent job. Same-repository PRs and pushes to `main` run it.
+
+To run the same live check locally, configure `.env` as described above, then:
+
+macOS / Linux:
+
+```sh
+RUN_LIVE_STOCKS=1 python -m pytest -q integration/test_stocks_live.py -m live --tb=short
+```
+
+Windows PowerShell:
+
+```powershell
+$env:RUN_LIVE_STOCKS = "1"
+python -m pytest -q integration/test_stocks_live.py -m live --tb=short
+Remove-Item Env:RUN_LIVE_STOCKS
+```
+
+A GitHub repository secret is available to Actions only; it does not create a
+local `.env` file. Local live fetching still needs the key in `.env` under the
+name `ALPHAVANTAGE_API_KEY`.
+
+Pytest discovers `tests/` (the detailed game and dashboard tests), `test/` (the
+additional in-class examples), and `integration/` (the opt-in live check).
 
 ## Code structure
 
@@ -212,6 +237,8 @@ tests/
   test_stocks.py       Stocks unit and local HTML integration tests
 test/
   rps_test.py          Additional in-class game tests
+integration/
+  test_stocks_live.py  Opt-in real API and dashboard check
 .github/workflows/
   tests.yml            GitHub Actions test workflow
 requirements.txt       Pinned application and test dependencies
