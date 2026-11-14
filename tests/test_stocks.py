@@ -126,7 +126,7 @@ def test_dashboard_uses_adjusted_prices_and_correct_summary():
 def test_demo_saves_standalone_html_without_network(monkeypatch, tmp_path, http, capsys):
     output = tmp_path / "nested" / "demo.html"
     assert stocks.main(["--demo", "--output", str(output)]) == 0
-    html = output.read_text()
+    html = output.read_text(encoding="utf-8")
     assert "Stock Prices (DEMO)" in html
     assert "plotly.js" in html
     assert "fictional sample prices" in capsys.readouterr().out
