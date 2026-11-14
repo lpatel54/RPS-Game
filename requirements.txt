@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # Stocks dashboard:
 pandas==2.2.3
 python-dotenv==1.0.1
@@ -6,3 +7,19 @@ requests==2.32.4
 
 # Tests:
 pytest==8.3.5
+=======
+
+
+
+# We will use pytest to test our program
+
+pytest
+
+# you might need these for optional bonus
+
+# pandas
+
+# plotly
+
+
+>>>>>>> Stashed changes
