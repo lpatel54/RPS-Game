@@ -8,7 +8,7 @@ the latest adjusted close and the change over the displayed period.
 
 ## Prerequisites
 
-- Python 3.11 or newer (CI checks Python 3.11, 3.12, and 3.13).
+- Python 3.11, 3.12, or 3.13. CI checks all three versions, and Render uses Python 3.12.
 - Git to clone the repository and save changes.
 - A terminal such as Terminal, PowerShell, or the VS Code terminal.
 
@@ -293,7 +293,7 @@ git switch main
 git pull --ff-only
 git switch -c improve-game
 # Edit code and run python -m pytest -q.
-git add <files-you-changed>
+git add app web_app tests
 git commit -m "Describe the improvement"
 git push -u origin improve-game
 ```
