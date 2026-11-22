@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: rps-stocks-lpatel54
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: python -m pip install -r requirements.txt
+    startCommand: gunicorn --no-control-socket --bind 0.0.0.0:$PORT --workers 1 --threads 4 "web_app:create_app()"
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALPHAVANTAGE_API_KEY
+        sync: false

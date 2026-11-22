@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% set active_page = "about" %}
+{% block title %}About | RPS &amp; Stocks{% endblock %}
+
+{% block content %}
+<section class="card app-panel">
+    <div class="card-body p-4">
+        <h1>About Me</h1>
+        <p>This Flask app brings the Quality Control command-line game and stocks dashboard
+            to the browser for the Fall 2026 Web App exercise.</p>
+        <p class="mb-0">The stocks report uses historical daily adjusted prices from AlphaVantage.
+            The demo report is labeled and uses fictional prices.</p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% set active_page = "hello" %}
+{% block title %}Hello | RPS &amp; Stocks{% endblock %}
+
+{% block content %}
+<section class="card app-panel">
+    <div class="card-body p-4">
+        <h1>{{ message }}</h1>
+        <form method="get" action="{{ url_for('home_routes.hello_world') }}">
+            <label for="name" class="form-label">Your name</label>
+            <input name="name" id="name" class="form-control mb-3" type="text" autocomplete="given-name">
+            <button class="btn btn-primary" type="submit">Say hello</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

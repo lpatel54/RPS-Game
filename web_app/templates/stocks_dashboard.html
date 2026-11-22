@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% set active_page = "stocks" %}
+{% block title %}{{ symbol }} Stocks Dashboard | RPS &amp; Stocks{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-4">
+    <h1 class="mb-0 text-break">Stocks Dashboard ({{ symbol }})</h1>
+    <a class="btn btn-outline-primary" href="{{ url_for('stocks_routes.stocks_form') }}">Look up another ticker</a>
+</div>
+{% if demo %}
+    <p class="alert alert-info">This demo uses fictional sample prices.</p>
+{% else %}
+    <p>Historical daily prices from AlphaVantage. Prices are shown in the instrument’s quote currency.</p>
+{% endif %}
+
+<dl class="row g-3 mb-4">
+    <div class="col-sm-6">
+        <div class="card h-100 p-3">
+            <dt>Latest adjusted close</dt>
+            <dd class="fs-3 mb-0">{{ "{:,.2f}".format(latest) }}</dd>
+            <dd class="text-body-secondary mb-0"><time datetime="{{ prices[0].timestamp }}">{{ prices[0].timestamp }}</time></dd>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100 p-3">
+            <dt>Change over displayed period</dt>
+            <dd class="fs-3 mb-0">{{ "{:+.2f}%".format(change) }}</dd>
+        </div>
+    </div>
+</dl>
+<section class="card mb-4" aria-labelledby="chart-heading">
+    <div class="card-body">
+        <h2 class="h4" id="chart-heading">Adjusted closing prices</h2>
+        {{ chart|safe }}
+    </div>
+</section>
+<section class="card" aria-labelledby="table-heading">
+    <div class="card-body">
+        <h2 class="h4" id="table-heading">Daily prices</h2>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0" aria-labelledby="table-heading">
+                <thead>
+                    <tr>
+                        <th scope="col">Trading date</th>
+                        <th scope="col" class="text-end">Adjusted close</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for price in prices %}
+                        <tr>
+                            <th scope="row"><time datetime="{{ price.timestamp }}">{{ price.timestamp }}</time></th>
+                            <td class="text-end">{{ "{:,.2f}".format(price.adjusted_close) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

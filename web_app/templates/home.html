@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% set active_page = "home" %}
+{% block title %}Home | RPS &amp; Stocks{% endblock %}
+
+{% block content %}
+<h1>Welcome Home</h1>
+<div class="row g-4 mt-2">
+    <div class="col-md-6">
+        <section class="card h-100">
+            <div class="card-body p-4">
+                <h2 class="h4">Rock Paper Scissors</h2>
+                <p>Choose a move and play a round against the computer.</p>
+                <a class="btn btn-primary" href="{{ url_for('rps_routes.form') }}">Play the game</a>
+            </div>
+        </section>
+    </div>
+    <div class="col-md-6">
+        <section class="card h-100">
+            <div class="card-body p-4">
+                <h2 class="h4">Stocks Report</h2>
+                <p>Look up a ticker to chart its daily adjusted closing prices.</p>
+                <a class="btn btn-primary" href="{{ url_for('stocks_routes.stocks_form') }}">Look up a ticker</a>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

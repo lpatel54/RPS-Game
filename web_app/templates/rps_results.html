@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% set active_page = "rps" %}
+{% block title %}Game Result | RPS &amp; Stocks{% endblock %}
+
+{% block content %}
+<section class="card app-panel">
+    <div class="card-body p-4">
+        <h1>Game Result</h1>
+        <p class="fs-4 fw-bold text-primary">{{ outcome }}</p>
+        <dl class="row">
+            <dt class="col-sm-6">Your move</dt>
+            <dd class="col-sm-6">{{ user_choice|capitalize }}</dd>
+            <dt class="col-sm-6">Computer’s move</dt>
+            <dd class="col-sm-6">{{ computer_choice|capitalize }}</dd>
+        </dl>
+        <a class="btn btn-primary" href="{{ url_for('rps_routes.form') }}">Play again</a>
+    </div>
+</section>
+{% endblock %}
