@@ -113,7 +113,8 @@ def build_dashboard(stocks_df: pd.DataFrame, symbol: str) -> go.Figure:
         title={"text": "Change over displayed period"},
     ), row=1, col=2)
     fig.add_trace(go.Scatter(
-        x=frame["timestamp"], y=frame["adjusted_close"], mode="lines",
+        x=frame["timestamp"], y=frame["adjusted_close"],
+        mode="lines" if len(frame) > 1 else "markers",
         name="Adjusted close", line={"color": "#2563eb", "width": 3},
     ), row=2, col=1)
     start = frame.iloc[0]["timestamp"].date()
@@ -128,6 +129,14 @@ def build_dashboard(stocks_df: pd.DataFrame, symbol: str) -> go.Figure:
     return fig
 
 
+def demo_prices() -> pd.DataFrame:
+    """Return the fictional sample prices shared by both interfaces."""
+    return parse_stocks_csv(
+        "timestamp,adjusted_close\n2026-01-02,100\n2026-01-05,103\n"
+        "2026-01-06,101\n2026-01-07,105\n2026-01-08,108\n"
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     """Save a standalone dashboard; optionally open it in a local browser."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -139,10 +148,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         symbol = normalize_symbol(args.symbol or ("DEMO" if args.demo else input("Please choose a stock symbol [NFLX]: ") or "NFLX"))
         if args.demo:
-            frame = parse_stocks_csv(
-                "timestamp,adjusted_close\n2026-01-02,100\n2026-01-05,103\n"
-                "2026-01-06,101\n2026-01-07,105\n2026-01-08,108\n"
-            )
+            frame = demo_prices()
             symbol = "DEMO"
             print("Demo mode: fictional sample prices, not market data.")
         else:

@@ -14,6 +14,11 @@ def normalize_choice(choice: str) -> str:
     return choice
 
 
+def generate_random_choice() -> str:
+    """Choose the computer's move for either app interface."""
+    return random.choice(VALID_OPTIONS)
+
+
 def determine_winner(u: str, c: str) -> str:
     """Return the outcome from the user's perspective; validate both choices."""
     user_choice = normalize_choice(u)
@@ -39,7 +44,7 @@ def main() -> int:
         print("\nGame cancelled.")
         return 0
 
-    computer_choice = random.choice(VALID_OPTIONS)
+    computer_choice = generate_random_choice()
     print("USER:", user_choice)
     print("COMP:", computer_choice)
     print(determine_winner(user_choice, computer_choice))

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% set active_page = "stocks" %}
+{% block title %}Stocks Report | RPS &amp; Stocks{% endblock %}
+
+{% block content %}
+<section class="card app-panel">
+    <div class="card-body p-4">
+        <h1>Stocks Report</h1>
+        <p>Enter a ticker to see its daily adjusted closing prices.</p>
+        <form method="post" action="{{ url_for('stocks_routes.stocks_dashboard') }}">
+            <label class="form-label" for="symbol">Stock symbol</label>
+            <input class="form-control" type="text" name="symbol" id="symbol" value="NFLX"
+                   maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false"
+                   aria-describedby="symbol-help" required>
+            <div id="symbol-help" class="form-text mb-3">Examples include NFLX, AAPL, and MSFT.</div>
+            <button class="btn btn-primary" type="submit">View report</button>
+        </form>
+        <a class="btn btn-link px-0 mt-2"
+           href="{{ url_for('stocks_routes.stocks_dashboard', demo=1) }}">See a sample report</a>
+    </div>
+</section>
+{% endblock %}

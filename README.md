@@ -1,8 +1,8 @@
 # RPS Game and Stocks Dashboard
 
-A local Python command-line game and stocks dashboard for the Fall 2026 Quality Control assignment.
+A Flask web app and Python CLI for the Fall 2026 Quality Control and Web App exercises.
 Play one round against the computer: rock beats scissors, scissors beats paper,
-and paper beats rock. Matching choices tie. The bonus dashboard fetches daily
+and paper beats rock. Matching choices tie. The stocks dashboard fetches daily
 adjusted stock prices from AlphaVantage and saves an interactive HTML chart with
 the latest adjusted close and the change over the displayed period.
 
@@ -78,8 +78,32 @@ python -m pip install -r requirements.txt
 
 `requirements.txt` lists pinned versions of pandas (data preparation), Plotly
 (interactive charts), requests (API access), python-dotenv (local configuration),
-and pytest (tests). The game itself uses Python's standard library. Virtual
+pytest (tests), Flask (web routes), and Gunicorn (production server). The game itself uses Python's standard library. Virtual
 environments and caches are excluded from Git.
+
+## Run the web app
+
+From the repository root, configure the AlphaVantage key in `.env` for live
+stocks, then run the class's command on macOS or Linux:
+
+```sh
+FLASK_APP=web_app flask run
+```
+
+This equivalent command also works in Windows PowerShell or Command Prompt:
+
+```sh
+python -m flask --app web_app run
+```
+
+Open [localhost:5000](http://localhost:5000/) and press Ctrl+C in the terminal
+to stop the local server. Use **RPS Game** to play a round, or **Stocks Report**
+to enter a ticker and see its dated price table and interactive chart. The RPS
+game and the clearly labeled sample stocks report work without an API key.
+**Hello** accepts a name at `/hello?name=Harper`, and the checkpoint's stock JSON
+route is available at `/api/stocks.json?symbol=NFLX` with a configured API key.
+
+See [DEPLOYING.md](DEPLOYING.md) for Render setup and verification.
 
 ## Run the game
 
@@ -188,6 +212,8 @@ Stocks tests cover the actual fetch function with mocked HTTP responses, request
 parameters, environment loading, CSV validation, price ordering, rate limits,
 network and HTTP errors, credential redaction, chart values, HTML output, and CLI
 behavior. The demo path writes a real standalone HTML chart during tests.
+Flask tests cover home routes, dropdown submission and results, stock form and
+dashboard rendering, provider errors, flash redirects, and the JSON route.
 
 The default test run uses mocked HTTP responses and needs no network or API key.
 It skips the opt-in live integration test. GitHub Actions runs the offline tests
@@ -232,7 +258,9 @@ app/
   my_script.py         Additional in-class practice script
   rps.py               Reusable game functions and CLI entry point
   stocks.py            Fetching, validation, dashboard, and CLI
+web_app/              Flask app factory, route blueprints, and Bootstrap templates
 tests/
+  test_web_app.py      Flask route and form tests
   test_rps.py          Unit and command-line integration tests
   test_stocks.py       Stocks unit and local HTML integration tests
 test/
@@ -241,6 +269,8 @@ integration/
   test_stocks_live.py  Opt-in real API and dashboard check
 .github/workflows/
   tests.yml            GitHub Actions test workflow
+render.yaml            Render Blueprint
+DEPLOYING.md           Production deployment and smoke-test guide
 requirements.txt       Pinned application and test dependencies
 pytest.ini             Test discovery and import configuration
 .env.example           Blank local API configuration template
@@ -263,7 +293,7 @@ git switch main
 git pull --ff-only
 git switch -c improve-game
 # Edit code and run python -m pytest -q.
-git add app tests README.md requirements.txt .github pytest.ini .gitignore .env.example
+git add <files-you-changed>
 git commit -m "Describe the improvement"
 git push -u origin improve-game
 ```
@@ -274,23 +304,15 @@ checks, fix any failures, and merge only after the checks pass. After merging,
 check the Actions run for `main` as well. The Actions tab is the source of truth
 for hosted CI status; passing local tests alone does not establish passing CI.
 
-The professor's Fall 2026 update waives the PR requirement for this assignment,
-but a merged PR provides useful workflow evidence. Only code on `main` will be
-evaluated. This README describes the workflow; actual commits, PRs, and Actions
-runs provide the evidence.
+The Web App exercise requires at least one merged PR containing web app work.
+Verify the merged code on `main` before deploying it.
 
-## Assignment scope and references
+## Course references
 
-This project implements the required rock paper scissors app and the optional
-AlphaVantage stocks dashboard. The original repository is owned by `lpatel54`.
-Only live stock fetching requires a secret; the game, demo, and tests do not.
-
-Class reference: [Code Cleanup and Testing](https://github.com/s2t2/my-first-app-fall-2026/pull/1).
-The project follows its `app.rps.determine_winner(u, c)` interface and outcome
-labels, with simplified rules and additional validation and tests.
-Stocks reference: [Stocks Dashboard PR #5](https://github.com/s2t2/my-first-repo-fall-2025/pull/5).
-The bonus follows its daily-adjusted CSV endpoint and adjusted-close chart, with
-separate parsing and chart functions and offline tests.
+- [Professor's Web App exercise](https://github.com/prof-rossetti/intro-to-python/tree/main/exercises/web-app-2023) for routing, layouts, dashboards, Flask tests, and Render.
+- [Fall 2026 in-class Web App PR](https://github.com/s2t2/my-first-app-fall-2026/pull/2) and [Fall 2025 routing and RPS PR](https://github.com/s2t2/my-first-repo-fall-2025/pull/7) for the Flask factory, blueprints, and HTML forms.
+- [Fall 2025 Bootstrap PR](https://github.com/s2t2/my-first-repo-fall-2025/pull/8) for the shared Bootstrap layout.
+- [Quality Control example](https://github.com/s2t2/my-first-app-fall-2026/pull/1) and [Stocks Dashboard PR](https://github.com/s2t2/my-first-repo-fall-2025/pull/5) for the original game, tests, and adjusted-price data.
 
 When finished, run `deactivate` to leave a `.venv` environment, or
 `conda deactivate` to leave an Anaconda environment.
